@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Directory</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+ <script>
+  window.addEventListener("DOMContentLoaded", function() {
+    if (!localStorage.getItem("loggedInRole")) {
+      window.location.href = "login.html";
+    }
+  });
+</script>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <video autoplay muted loop playsinline class="hero-video">
+      <source src="hero-bg.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay">
+      <h1 class="hero-title">MAHARAJA VIJAYRAM GAJAPATHI RAJA ENGINEERING COLLEGE</h1>
+      <p class="hero-subtitle">MVGR</p>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div>
+      <h1>MVGR</h1>
+      <p>Maharaja Vijayaram Gajapathi Raj College</p>
+    </div>
+    <div class="navbar-right">
+      <span id="user-info"></span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-box">
+        <div class="num" id="stat-total">0</div>
+        <div class="lbl">Total Students</div>
+      </div>
+      <div class="stat-box">
+        <div class="num">4</div>
+        <div class="lbl">Branches</div>
+      </div>
+      <div class="stat-box">
+        <div class="num" id="stat-showing">0</div>
+        <div class="lbl">Showing</div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrapper">
+       <div class="search-row">
+  <input type="text" id="search-input" placeholder="🔍  Search by name or roll number..."/>
+  <button onclick="clearSearch()">✕ Clear</button>
+</div>
+<div class="ai-search-row">
+  <input type="text" id="ai-search-input" placeholder="🤖  Ask AI: e.g. show me CSE students in semester 3 section A"/>
+  <button onclick="runAiSearch()" id="ai-btn">Ask AI</button>
+</div>
+<p class="ai-status" id="ai-status"></p>
+      <div class="filters">
+        <select id="branch-filter">
+          <option value="">All Branches</option>
+          <option>CSE</option>
+          <option>ECE</option>
+          <option>MECH</option>
+          <option>CIVIL</option>
+        </select>
+        <select id="sem-filter">
+          <option value="">All Semesters</option>
+          <option>1</option><option>2</option><option>3</option>
+          <option>4</option><option>5</option><option>6</option>
+          <option>7</option><option>8</option>
+        </select>
+        <select id="sec-filter">
+          <option value="">All Sections</option>
+          <option>A</option>
+          <option>B</option>
+          <option>C</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Result Count -->
+    <p id="result-count"></p>
+<!-- AI Announcements (Faculty Only) -->
+<div class="announcements-section" id="announcements-section" style="display:none">
+  <div class="announcements-header">
+    <h2>📢 AI Announcement Generator</h2>
+    <p>Type a rough note — AI will convert it into a formal announcement</p>
+  </div>
+  <div class="announcements-box">
+    <textarea id="rough-note" placeholder="e.g. tell students exams start next monday, bring id cards, no mobile phones allowed"></textarea>
+    <button onclick="generateAnnouncement()" id="announce-btn">✨ Generate Announcement</button>
+  </div>
+  <div id="announcement-output" class="announcement-output" style="display:none">
+    <div class="announcement-result" id="announcement-result"></div>
+    <button onclick="copyAnnouncement()" class="copy-btn">📋 Copy Announcement</button>
+  </div>
+</div>
+    <!-- Cards -->
+    <div id="cards-container"></div>
+
+  </div>
+
+  <div class="footer">
+    <p>© 2025 MVGR College · Student Directory</p>
+  </div>
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="ai-search.js"></script>
+<script src="script.js"></script>
+<!-- Chatbot Button -->
+<button class="chat-fab" onclick="toggleChat()">🤖</button>
+
+<!-- Chatbot Window -->
+<div class="chat-window" id="chat-window">
+  <div class="chat-header">
+    <span>🤖 MVGR AI Assistant</span>
+    <button onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg bot">
+      Hi! I'm your MVGR Directory Assistant. Ask me anything like:<br><br>
+      • "How many CSE students are there?"<br>
+      • "Find Rohan's email"<br>
+      • "Who is in ECE section B?"
+    </div>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Ask anything..." 
+           onkeydown="if(event.key==='Enter') sendChat()"/>
+    <button onclick="sendChat()">Send</button>
+  </div>
+</div>
+</body>
+</html> 
